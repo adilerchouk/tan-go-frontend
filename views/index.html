@@ -17,70 +17,74 @@
         <!-- Carte -->
        <div id="map"></div>
         
+        <!-- Boîte de dialogue -->
         <div id="dialog"></div>
 
+
+
         <script type="module" src="javascripts/script.js"></script>
-        <script>
+        
+        <script type="text/javascript">
 
-            /**
-             *  Méthode permettant d'afficher les horaires de tram.
-             */
-            async function getSchedule (line, stop, sens, direction, logo) {
-                
-                let schedule = await getScheduleFromStop (line, stop, sens);
+        /**
+         *  Méthode permettant d'afficher les horaires de tram.
+         */
+         async function getSchedule (line, stop, sens, direction, logo) {
+            
+            let schedule = await getScheduleFromStop (line, stop, sens);
 
-                document.getElementById("dialog").innerHTML = "<div id=\"schedule\">" + 
-                    "<p class=\"title\">Direction  " + direction + " :</p>" +
-                    "<div>" +
-                        "<img class=\"logo2\" src=\"images/" + logo + "\" />" +
-                        "<p class=\"line2\">" + schedule[0] + "</p>" +
-                    "</div>" +
-                    "<div>" +
-                        "<img class=\"logo2\" src=\"images/" + logo + "\" />" +
-                        "<p class=\"line2\">" + schedule[1] + "</p>" +
-                    "</div>" +
-                    "<div>" +
-                        "<img class=\"logo2\" src=\"images/" + logo + "\" />" +
-                        "<p class=\"line2\">" + schedule[2] + "</p>" +
-                    "</div>" +
-                    "<br />" +
-                "</div>";
-            }
+            document.getElementById("dialog").innerHTML = "<div id=\"schedule\">" + 
+                "<p class=\"title\">Direction  " + direction + " :</p>" +
+                "<div>" +
+                    "<img class=\"logo2\" src=\"images/" + logo + "\" />" +
+                    "<p class=\"line2\">" + schedule[0] + "</p>" +
+                "</div>" +
+                "<div>" +
+                    "<img class=\"logo2\" src=\"images/" + logo + "\" />" +
+                    "<p class=\"line2\">" + schedule[1] + "</p>" +
+                "</div>" +
+                "<div>" +
+                    "<img class=\"logo2\" src=\"images/" + logo + "\" />" +
+                    "<p class=\"line2\">" + schedule[2] + "</p>" +
+                "</div>" +
+                "<br />" +
+            "</div>";
+        }
 
-            /**
-             *  Méthode permettant de récupérer les différents horaires d'un tram
-             *      pour un arrêt particulier
-             *      dans une direction
-             */
-            function getScheduleFromStop (line, stop, direction) {
+        /**
+         *  Méthode permettant de récupérer les différents horaires d'un tram
+         *      pour un arrêt particulier
+         *      dans une direction
+         */
+        function getScheduleFromStop (line, stop, direction) {
 
-                return new Promise (function(resolve, reject) {
+            return new Promise (function(resolve, reject) {
 
-                    let xhr = new XMLHttpRequest();
-                    xhr.open('GET', '/schedule/' + stop);
-                    xhr.send(null);
+                let xhr = new XMLHttpRequest();
+                xhr.open('GET', '/schedule/' + stop);
+                xhr.send(null);
 
-                    xhr.addEventListener('readystatechange', function () {
-                        let json = JSON.parse(xhr.response);
-                        let schedule = [];
+                xhr.addEventListener('readystatechange', function () {
+                    let json = JSON.parse(xhr.response);
+                    let schedule = [];
 
-                        let k = 0;
-                        for (let i=0; i<json.body.length; i++) {
+                    let k = 0;
+                    for (let i=0; i<json.body.length; i++) {
 
-                            let station = json.body[i];
-                            
-                            if (station.ligne.numLigne === line && station.sens === direction) {
-                                schedule.push(station.temps);
-                                k++;
+                        let station = json.body[i];
+                        
+                        if (station.ligne.numLigne === line && station.sens === direction) {
+                            schedule.push(station.temps);
+                            k++;
 
-                                if (k === 3) { break; }
-                            }
+                            if (k === 3) { break; }
                         }
+                    }
 
-                        resolve (schedule);
-                    });
+                    resolve (schedule);
                 });
-            }
+            });
+        }
 
         </script>
     </body>

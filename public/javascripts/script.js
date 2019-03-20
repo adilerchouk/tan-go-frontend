@@ -2,18 +2,14 @@ import {LINE_1, LINE_1_TERMINUS, LINE_1_LOGO, LINE_1_COLOR} from '../resources/l
 import {LINE_2, LINE_2_TERMINUS, LINE_2_LOGO, LINE_2_COLOR} from '../resources/line2.js';
 import {LINE_3, LINE_3_TERMINUS, LINE_3_LOGO, LINE_3_COLOR} from '../resources/line3.js';
 
-const latitude = 47.21342010;
-const longitude = -1.55542978;
+const LATITUDE = 47.21342010;
+const LONGITUDE = -1.55542978;
 var map = null;
 
-/*/
-var icon = L.icon({
-    iconUrl: "./svg/Tram_L3.svg",
-    iconSize: [50, 50],
-    iconAnchor: [25, 50],
-    popupAnchor: [-3, -76],
-});
-*/
+
+//############################################################################################################################//
+//  Carte
+//############################################################################################################################//
 
 /**
  *  Méthode permettant d'initialiser la carte.
@@ -21,8 +17,8 @@ var icon = L.icon({
 function initMap () {
 
     map = L.map('map', {
-        center: [latitude, longitude],
-        zoom: 16
+        center: [LATITUDE, LONGITUDE],
+        zoom: 17
     });
     
     L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
@@ -66,63 +62,10 @@ function addSegments (markers, color) {
     }
 }
 
-/**
- *  Méthode permettant de réaliser le déplacement d'un marker le long d'un trajet.
- */
-function moveMarker (t, stops) {
 
-    const n = stops.length;
-
-    for (let i=0; i<n-1; i++) {
-        setTimeout(function () {
-            moveMarkerBetweenTwoStops(t/n, stops[i], stops[i+1]);
-        }, i*t/n);
-    }
-
-}
-
-/**
- *  Méthode permettant de réaliser le déplacement d'un marker entre deux arrêts.
- */
-function moveMarkerBetweenTwoStops (t, origin, destination) {
-
-    const d = 50;
-
-    const n = t/d;
-    const x = (destination.lat - origin.lat) / n;
-    const y = (destination.long - origin.long) / n;
-
-    var circle = null;
-
-    circle = L.circle([origin.lat, origin.long], {
-        color: "black",
-        fillOpacity: 0.5,
-        radius: 10
-    }).addTo(map);
-
-    for (let i=1; i<n; i++) {
-        setTimeout(function () {
-
-            if (circle != undefined) {
-                map.removeLayer(circle);
-            }
-
-            circle = L.circle([origin.lat + i*x, origin.long + i*y], {
-                color: "black",
-                fillOpacity: 0.5,
-                radius: 10,
-            }).addTo(map);
-
-        }, i*d);
-    }
-
-    setTimeout(function () {
-        if (circle != undefined) {
-            map.removeLayer(circle);
-        }
-    }, n*d);
-
-}
+//############################################################################################################################//
+//  Boîte de dialogue
+//############################################################################################################################//
 
 /**
  *  Méthode permettant d'ouvrir une boîte de dialogue.
@@ -148,11 +91,13 @@ function openSchedule (line, stop, terminus, logo) {
 }
 
 
-/**
- *  Méthode principale.
- */
+//############################################################################################################################//
+//  Main
+//############################################################################################################################//
+
 window.onload = function () {
 
+    //  Initialisation de la carte.
     initMap();
     
     //  Ajout des différentes stations.
@@ -160,16 +105,9 @@ window.onload = function () {
     addMarkers(LINE_2, "2", LINE_2_TERMINUS, LINE_2_LOGO, LINE_2_COLOR);
     addMarkers(LINE_3, "3", LINE_3_TERMINUS, LINE_3_LOGO, LINE_3_COLOR);
 
-    //  Ajout des lignes de trams.
+    //  Ajout des différentes lignes de trams.
     addSegments(LINE_1, LINE_1_COLOR);
     addSegments(LINE_2, LINE_2_COLOR);
     addSegments(LINE_3, LINE_3_COLOR);
 
-    //moveMarker(50000, LINE_2);
-
-    /*
-    moveMarker(20000,
-        { code: 'OTAG', lat: 47.21990598, long: -1.55512076 },
-        { code: 'CRQU', lat: 47.21696856, long: -1.55675776 });
-        */
 };
