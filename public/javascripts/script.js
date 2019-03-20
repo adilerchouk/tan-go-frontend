@@ -15,7 +15,6 @@ var icon = L.icon({
 });
 */
 
-
 /**
  *  Méthode permettant d'initialiser la carte.
  */
@@ -46,8 +45,7 @@ function addMarkers (markers, line, terminus, logo, color) {
             radius: 10
         }).addTo(map)
         .on('click', function(e) {
-            //getStopInformations(markers[i].code, line);
-            openSchedule(terminus, logo);
+            openSchedule(line, markers[i].code, terminus, logo);
         });
         marker.bindPopup(markers[i].code);
     }
@@ -109,11 +107,10 @@ function moveMarkerBetweenTwoStops (t, origin, destination) {
                 map.removeLayer(circle);
             }
 
-            circle = L.marker([origin.lat + i*x, origin.long + i*y], {
+            circle = L.circle([origin.lat + i*x, origin.long + i*y], {
                 color: "black",
                 fillOpacity: 0.5,
                 radius: 10,
-                //icon: icon
             }).addTo(map);
 
         }, i*d);
@@ -128,71 +125,27 @@ function moveMarkerBetweenTwoStops (t, origin, destination) {
 }
 
 /**
- *  Méthode permettant de récupérer les différents horaires d'un tram
- *      pour un arrêt particulier
- *      dans les deux sens
- */
-function getScheduleFromStop (stop, line) {
-
-    return new Promise (function(resolve, reject) {
-
-        let xhr = new XMLHttpRequest();
-        xhr.open('GET', '/schedule/' + stop);
-        xhr.send(null);
-    
-        xhr.addEventListener('readystatechange', function () {
-            let json = JSON.parse(xhr.response);
-            let schedule = [];
-    
-            for (let i=0; i<json.body.length; i++) {
-    
-                let station = json.body[i];
-                
-                if (station.ligne.numLigne === line) {
-                    schedule.push({ stop: stop, line: line, direction: station.sens, time: station.temps });
-                }
-            }
-    
-            resolve (schedule);
-        });
-    });
-}
-
-
-/**
  *  Méthode permettant d'ouvrir une boîte de dialogue.
  */
-function openSchedule (terminus, logo) {
+function openSchedule (line, stop, terminus, logo) {
 
     document.getElementById("dialog").innerHTML = "<div id=\"schedule\">" + 
             "<p class=\"title\">Choisir une direction :</p>" +
             "<div class=\"terminus\" id=\"terminus1\">" +
-                "<img class=\"logo\" src=\"images/" + logo + "\" />" +
-                "<p class=\"line\">" + terminus[0] + "</p>" +
+                "<div onclick=\"getSchedule('" + line + "', '" + stop + "', 1, '" + terminus[0] + "', '" + logo + "')\">" +
+                    "<img class=\"logo\" src=\"images/" + logo + "\" />" +
+                    "<p class=\"line\">" + terminus[0] + "</p>" +
+                "</div>" +
             "</div>" +
-            "<div class=\"terminus\" id=\"terminus2\">" +
-            "<img class=\"logo\" src=\"images/" + logo + "\" />" +
-                "<p class=\"line\">" + terminus[1] + "</p>" +
+            "<div class=\"terminus\" id=\"terminus1\">" +
+                "<div onclick=\"getSchedule('" + line + "', '" + stop + "', 2, '" + terminus[1] + "', '" + logo + "')\">" +
+                    "<img class=\"logo\" src=\"images/" + logo + "\" />" +
+                    "<p class=\"line\">" + terminus[1] + "</p>" +
+                "</div>" +
             "</div>" +
         "</div>";
 
 }
-
-
-/**
- *  Méthode permettant de récupérer des infos sur un arrêt de tram.
- */
-async function getStopInformations (stop ,line) {
-
-
-
-
-    let schedule = await getScheduleFromStop(stop, line);
-    console.log(schedule);
-
-
-}
-
 
 
 /**
@@ -211,11 +164,6 @@ window.onload = function () {
     addSegments(LINE_1, LINE_1_COLOR);
     addSegments(LINE_2, LINE_2_COLOR);
     addSegments(LINE_3, LINE_3_COLOR);
-
-    //console.log(getScheduleFromStop("CRQU", "2"));
-    //console.log(test);
-
-    //httpGet("http://open_preprod.tan.fr/ewp/arrets.json");
 
     //moveMarker(50000, LINE_2);
 

@@ -50,11 +50,23 @@ html, body {
 .logo {
   margin-top: 5px;
   width: 20%;
+  cursor: pointer;
 }
 
-.line {
+.logo2 {
+  width: 5%;
+  position: absolute;
+  margin-left: 10%;
+}
+
+.line, .line2 {
   color: #FFFFFF;
   font-family: 'Lato', sans-serif;
-  font-size: 13px;
   margin-top: 5px;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.line2 {
+  margin-left: 25%;
 }
