@@ -1,5 +1,9 @@
 export const LINE_3_COLOR = "blue";
 
+export const LINE_3_TERMINUS = ["Neustrie", "Marcel Paul"];
+
+export const LINE_3_LOGO = "Tram_L3.svg";
+
 export const LINE_3 = 
 [ { code: 'MPAU', lat: 47.24576505, long: -1.61572851 },
   { code: 'SILL', lat: 47.24573499, long: -1.60871614 },

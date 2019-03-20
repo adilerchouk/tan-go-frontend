@@ -1,5 +1,9 @@
 export const LINE_2_COLOR = "red";
 
+export const LINE_2_TERMINUS = ["Gare de Pont Rousseau", "Orvault - Grand Val"];
+
+export const LINE_2_LOGO = "Tram_L2.svg";
+
 export const LINE_2 = 
 [ { code: 'OGVA', lat: 47.26297286, long: -1.59450834 },
   { code: 'LCAR', lat: 47.26160277, long: -1.58448475 },

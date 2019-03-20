@@ -1,5 +1,60 @@
+@import url('https://fonts.googleapis.com/css?family=Lato');
+
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+}
 
 #map {
-  height: 800px;
+  position: absolute;
+  height: 100%;
   width: 100%;
+  z-index: 1;
+}
+
+#schedule {
+  bottom: 0;
+  position: absolute;
+  width: 100%;
+  z-index: 20;
+  background-color: #2A2E43;
+  border-radius: 5px 0 5px 0;
+}
+
+.title {
+  color: #FFFFFF;
+  font-family: 'Lato', sans-serif;
+  font-size: 15px;
+  margin: 15px;
+}
+
+.terminus {
+  width: 45%;
+  height: 80px;
+  text-align: center;
+  background-color: #353A50;
+  display: inline-block;
+  border-radius: 5px;
+  margin: 10px;
+}
+
+#terminus1 {
+  float: left;
+}
+
+#terminus2 {
+  float: right;
+}
+
+.logo {
+  margin-top: 5px;
+  width: 20%;
+}
+
+.line {
+  color: #FFFFFF;
+  font-family: 'Lato', sans-serif;
+  font-size: 13px;
+  margin-top: 5px;
 }

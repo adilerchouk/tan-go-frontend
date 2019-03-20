@@ -18,12 +18,10 @@ const TEMPS_ATTENTE = "http://open.tan.fr/ewp/tempsattente.json/";
  */
 app.get('/schedule/:stop', function (request, response) {
 
-  console.log("Test");
   httpRequest({
     url: TEMPS_ATTENTE + request.params.stop,
     json: true
   }, function (error, result) {
-      console.log(TEMPS_ATTENTE + request.params.stop);
       response.setHeader('Content-Type', 'application/json');
       response.end(JSON.stringify(result));
   });

@@ -1,7 +1,6 @@
-import {LINE_1, LINE_1_COLOR} from '../resources/line1.js';
-import {LINE_2, LINE_2_COLOR} from '../resources/line2.js';
-import {LINE_3, LINE_3_COLOR} from '../resources/line3.js';
-//import { resolve } from 'path';
+import {LINE_1, LINE_1_TERMINUS, LINE_1_LOGO, LINE_1_COLOR} from '../resources/line1.js';
+import {LINE_2, LINE_2_TERMINUS, LINE_2_LOGO, LINE_2_COLOR} from '../resources/line2.js';
+import {LINE_3, LINE_3_TERMINUS, LINE_3_LOGO, LINE_3_COLOR} from '../resources/line3.js';
 
 const latitude = 47.21342010;
 const longitude = -1.55542978;
@@ -38,14 +37,18 @@ function initMap () {
 /**
  *  Méthode permettant d'ajouter différents markers sur la carte.
  */
-function addMarkers (markers, color) {
+function addMarkers (markers, line, terminus, logo, color) {
     for (let i=0; i<markers.length; i++) {
         var marker = L.circle([markers[i].lat, markers[i].long], {
             color: color,
             fillColor: '#f03',
             fillOpacity: 0.5,
             radius: 10
-        }).addTo(map);
+        }).addTo(map)
+        .on('click', function(e) {
+            //getStopInformations(markers[i].code, line);
+            openSchedule(terminus, logo);
+        });
         marker.bindPopup(markers[i].code);
     }
 }
@@ -155,9 +158,41 @@ function getScheduleFromStop (stop, line) {
     });
 }
 
-async function test () {
-    return await getScheduleFromStop("CRQU");
+
+/**
+ *  Méthode permettant d'ouvrir une boîte de dialogue.
+ */
+function openSchedule (terminus, logo) {
+
+    document.getElementById("dialog").innerHTML = "<div id=\"schedule\">" + 
+            "<p class=\"title\">Choisir une direction :</p>" +
+            "<div class=\"terminus\" id=\"terminus1\">" +
+                "<img class=\"logo\" src=\"images/" + logo + "\" />" +
+                "<p class=\"line\">" + terminus[0] + "</p>" +
+            "</div>" +
+            "<div class=\"terminus\" id=\"terminus2\">" +
+            "<img class=\"logo\" src=\"images/" + logo + "\" />" +
+                "<p class=\"line\">" + terminus[1] + "</p>" +
+            "</div>" +
+        "</div>";
+
 }
+
+
+/**
+ *  Méthode permettant de récupérer des infos sur un arrêt de tram.
+ */
+async function getStopInformations (stop ,line) {
+
+
+
+
+    let schedule = await getScheduleFromStop(stop, line);
+    console.log(schedule);
+
+
+}
+
 
 
 /**
@@ -168,21 +203,21 @@ window.onload = function () {
     initMap();
     
     //  Ajout des différentes stations.
-    addMarkers(LINE_1, LINE_1_COLOR);
-    addMarkers(LINE_2, LINE_2_COLOR);
-    addMarkers(LINE_3, LINE_3_COLOR);
+    addMarkers(LINE_1, "1", LINE_1_TERMINUS, LINE_1_LOGO, LINE_1_COLOR);
+    addMarkers(LINE_2, "2", LINE_2_TERMINUS, LINE_2_LOGO, LINE_2_COLOR);
+    addMarkers(LINE_3, "3", LINE_3_TERMINUS, LINE_3_LOGO, LINE_3_COLOR);
 
     //  Ajout des lignes de trams.
     addSegments(LINE_1, LINE_1_COLOR);
     addSegments(LINE_2, LINE_2_COLOR);
     addSegments(LINE_3, LINE_3_COLOR);
 
-    console.log(getScheduleFromStop("CRQU", "2"));
+    //console.log(getScheduleFromStop("CRQU", "2"));
     //console.log(test);
 
     //httpGet("http://open_preprod.tan.fr/ewp/arrets.json");
 
-    moveMarker(50000, LINE_2);
+    //moveMarker(50000, LINE_2);
 
     /*
     moveMarker(20000,

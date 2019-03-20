@@ -1,5 +1,9 @@
 export const LINE_1_COLOR = "green";
 
+export const LINE_1_TERMINUS = ["François Mitterrand", "Beaujoire"];
+
+export const LINE_1_LOGO = "Tram_L1.svg";
+
 export const LINE_1 = 
 [ { code: 'FMIT', lat: 47.22210178, long: -1.63857119 },
   { code: 'TMLI', lat: 47.22148411, long: -1.6329725 },
