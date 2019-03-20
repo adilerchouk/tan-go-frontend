@@ -1,12 +1,21 @@
-var createError = require('http-errors');
-var express = require('express');
-var path = require('path');
-var cookieParser = require('cookie-parser');
-var logger = require('morgan');
 
-var indexRouter = require('./routes/index');
+//  Modules
+const createError = require('http-errors');
+const express = require('express');
+const path = require('path');
+const cookieParser = require('cookie-parser');
+const logger = require('morgan');
+const request = require('request');
+const indexRouter = require('./routes/index');
 
-var app = express();
+const app = express();
+
+const TEMPS_ATTENTE = "http://open.tan.fr/ewp/tempsattente.json/";
+
+
+/**
+ *  Méthode principale
+ */
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
