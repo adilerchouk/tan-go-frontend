@@ -1,6 +1,7 @@
 import {LINE_1, LINE_1_COLOR} from '../resources/line1.js';
 import {LINE_2, LINE_2_COLOR} from '../resources/line2.js';
 import {LINE_3, LINE_3_COLOR} from '../resources/line3.js';
+//import { resolve } from 'path';
 
 const latitude = 47.21342010;
 const longitude = -1.55542978;
@@ -124,13 +125,38 @@ function moveMarkerBetweenTwoStops (t, origin, destination) {
 }
 
 /**
- *  Méthode permettant de récupérer les différents horaires d'un tram pour un arrêt particulier.
+ *  Méthode permettant de récupérer les différents horaires d'un tram
+ *      pour un arrêt particulier
+ *      dans les deux sens
  */
-function getScheduleFromStop (stop) {
+function getScheduleFromStop (stop, line) {
 
-    var xhr = new XMLHttpRequest();
-    xhr.open('GET', '/schedule');
-    xhr.send('stop=' + stop);
+    return new Promise (function(resolve, reject) {
+
+        let xhr = new XMLHttpRequest();
+        xhr.open('GET', '/schedule/' + stop);
+        xhr.send(null);
+    
+        xhr.addEventListener('readystatechange', function () {
+            let json = JSON.parse(xhr.response);
+            let schedule = [];
+    
+            for (let i=0; i<json.body.length; i++) {
+    
+                let station = json.body[i];
+                
+                if (station.ligne.numLigne === line) {
+                    schedule.push({ stop: stop, line: line, direction: station.sens, time: station.temps });
+                }
+            }
+    
+            resolve (schedule);
+        });
+    });
+}
+
+async function test () {
+    return await getScheduleFromStop("CRQU");
 }
 
 
@@ -151,7 +177,8 @@ window.onload = function () {
     addSegments(LINE_2, LINE_2_COLOR);
     addSegments(LINE_3, LINE_3_COLOR);
 
-    //getScheduleFromStop("CRQU");
+    console.log(getScheduleFromStop("CRQU", "2"));
+    //console.log(test);
 
     //httpGet("http://open_preprod.tan.fr/ewp/arrets.json");
 
