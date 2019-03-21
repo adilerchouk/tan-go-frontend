@@ -18,7 +18,7 @@ var map = null;
 
 /**
  *  Méthode permettant d'initialiser la carte.
- */
+git  */
 function initMap () {
 
     map = L.map('map', {
@@ -48,7 +48,7 @@ function addMarkers (markers, line, terminus, logo, color) {
         .on('click', function(e) {
             openSchedule(line, markers[i].code, terminus, logo);
         });
-        marker.bindPopup(markers[i].code);
+        //marker.bindPopup(markers[i].code);
     }
 }
 
